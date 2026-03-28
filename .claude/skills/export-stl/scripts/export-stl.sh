@@ -9,6 +9,7 @@ set -e
 # Default values
 OUTPUT=""
 FORMAT="binstl"  # Binary STL by default
+DEFINES=()       # -D variable overrides
 
 # OpenSCAD path (macOS default)
 OPENSCAD="/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD"
@@ -32,6 +33,10 @@ while [[ $# -gt 0 ]]; do
             OUTPUT="$2"
             shift 2
             ;;
+        -D)
+            DEFINES+=("-D" "$2")
+            shift 2
+            ;;
         --binary)
             FORMAT="binstl"
             shift
@@ -47,6 +52,7 @@ while [[ $# -gt 0 ]]; do
             echo "  --output <path>   Output STL path (default: <input>.stl)"
             echo "  --binary          Binary STL format (default, smaller)"
             echo "  --ascii           ASCII STL format (human-readable)"
+            echo "  -D <var=value>    Override OpenSCAD variable (repeatable)"
             echo ""
             echo "Performs geometry validation during export:"
             echo "  - Non-manifold edges (holes in mesh)"
@@ -100,6 +106,9 @@ echo ""
 # Build OpenSCAD command
 CMD=("$OPENSCAD")
 CMD+=("--export-format" "$FORMAT")
+if [[ ${#DEFINES[@]} -gt 0 ]]; then
+    CMD+=("${DEFINES[@]}")
+fi
 CMD+=("-o" "$OUTPUT")
 CMD+=("$INPUT")
 
