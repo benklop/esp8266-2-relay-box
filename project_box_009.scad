@@ -215,11 +215,11 @@ module lid() {
                         }
         }
 
-        // M3 clearance hole through lid plate (screw enters from exterior)
+        // 6mm hole through lid plate — screw head drops through to seat in boss counterbore
         for (x = [-hole_w/2, hole_w/2])
             for (y = [-hole_l/2, hole_l/2])
                 translate([x, y, -0.01])
-                    cylinder(d=m3_clr, h=lid_t + 0.02);
+                    cylinder(d=lid_boss_id, h=lid_t + 0.02);
     }
 }
 
